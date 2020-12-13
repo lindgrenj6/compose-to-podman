@@ -24,11 +24,9 @@ def parse_compose_file
                                     "--name #{service_to_container_name(service_name)}"
                                   end
     # environment:
-    @cli_strings[service_name] << service[:environment].map { |var| "-e \"#{var.kind_of?(Array) ? var.join('=') : var}\"" } unless service[:environment].nil?
+    @cli_strings[service_name] << service[:environment].map { |var| "-e \"#{var.is_a?(Array) ? var.join('=') : var}\"" } unless service[:environment].nil?
     # volumes:
-    unless service[:volumes].nil?
-      @cli_strings[service_name] << service[:volumes].map { |vol| "-v \"#{vol}\"" }.join(' ')
-    end
+    @cli_strings[service_name] << service[:volumes].map { |vol| "-v \"#{vol}\"" }.join(' ') unless service[:volumes].nil?
 
     # ports:
     @cli_strings[service_name] << service[:ports].map { |port| "-p \"#{port}\"" }.join(' ') unless service[:ports].nil?
